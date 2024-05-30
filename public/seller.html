@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Dashboard</title>
+    <link rel="stylesheet" href="css/signup.css">
+    <link rel="stylesheet" href="css/seller.css">
+</head>
+<body>
+    <img src="img/loader.gif" class="loader" alt="">
+    <div class="alert-box ">
+        <img src="img/error.png" class="alert-img" alt="">
+        <p class="alert-msg">Error message</p>
+    </div>
+  <img src="img/dark-logo.png" class="logo" alt="">
+
+  <!-- become seller element -->
+  <div class="become-seller hide">
+    <p class="heading">become a seller</p>
+    <p class="des">Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque, accusamus. Reprehenderit voluptatem ea aspernatur ad, esse quo ipsa odit aut. Possimus quas, laborum consequuntur quae vel dolorum cumque ipsa porro, unde harum, animi commodi exercitationem doloremque pariatur provident molestias iste eius. Mollitia est odio impedit rem doloribus, eaque voluptate quidem, corrupti quos repudiandae facilis repellendus sed harum, fugiat quas dignissimos adipisci corporis ullam. Animi, ipsa odit corrupti beatae necessitatibus nobis voluptas qui velit sequi similique nam possimus excepturi saepe, eius fuga, libero voluptates doloremque dicta alias reiciendis! Dolor nam doloremque id ad autem eligendi culpa at. Similique esse id possimus.</p>
+    <button class="btn" id="apply-btn">apply for seller account</button>
+  </div>
+
+  <!-- apply form -->
+  <div class="apply-form hide">
+    <input type="text" id="business-name" placeholder="business-name/company name/ shop name">
+    <textarea name="" id="business-add" placeholder="address"></textarea>
+    <textarea name="" id="about" placeholder="about"></textarea>
+    <input type="text" name="" id="number" placeholder="number">
+    <input type="checkbox" checked class="checkbox" id="terms-and-condition">
+    <label for="terms-and-condition">agree to our <a href="">terms-and-condition</a></label>
+    <br>
+    <input type="checkbox" checked class="checkbox" id="legitInfo">
+    <label for="legitInfo">all information is legit</label>
+    <button class="submit-btn" id="apply-form-btn">apply</button>
+
+
+  </div>
+
+  <!-- product list -->
+  <div class="product-listing">
+    <div class="add-product">
+        <p class="add-product-title">add product</p>
+        <button class="btn">add product</button>
+    </div>
+    <img src="img/404.png" alt="" class="no-product-image">
+  </div>
+
+    <script src="js/token.js"></script>
+    <script src="js/seller.js"></script>
+</body>
+</html>
