@@ -85,4 +85,5 @@ body{
 .no-product-image{
     display:block ;
     margin: auto;
+    height: 50%;
 }

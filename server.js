@@ -6,7 +6,7 @@ const path = require("path");
 
 //firebase setup
 
-let serviceAccount = require("./ecommerce-a06ac-firebase-adminsdk-rspc3-fa9cdc65c5.json");
+let serviceAccount = require("./ecommerce-a06ac-firebase-adminsdk-rspc3-397a3e97d2.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -130,6 +130,11 @@ app.post('/seller', (req,res) => {
       })
     })
   }
+})
+
+//add product
+app.get('/add-product', (req, res) => {
+  res.sendFile(path.join(staticPath, "addProduct.html"));
 })
 //404 route
 app.use("/404", (req, res) => {
