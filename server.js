@@ -14,6 +14,40 @@ admin.initializeApp({
 
 let db = admin.firestore();
 
+//aws config
+const aws = require("aws-sdk");
+const dotenv = require("dotenv");
+
+dotenv.config();
+
+//aws paraameters
+const region = "eu-north-1";
+const bucketName = "ecommerce-store-firstpro";
+const accessKeyId = process.env.AWS_ACCESS_KEY;
+const secretAccessKey = process.env.AWS_SECRET_KEY;
+
+aws.config.update({
+  region,
+  accessKeyId,
+  secretAccessKey,
+});
+//init s3
+const s3 = new aws.S3();
+
+//generate image upload link
+async function generateUrl() {
+  let date = new Date();
+  let id = parseInt(Math.random() * 10000000000);
+  const imageName = `${id}${date.getTime()}.jpg`;
+  const params = {
+    Bucket: bucketName,
+    Key: imageName,
+    Expires: 300, //300ms
+    ContentType: "image/jpeg",
+  };
+  const uploadUrl = await s3.getSignedUrlPromise("putObject", params);
+  return uploadUrl;
+}
 //declare static path
 let staticPath = path.join(__dirname, "public");
 //initializing express.js
@@ -69,73 +103,90 @@ app.post("/signup", (req, res) => {
                 res.json({
                   name: req.body.name,
                   email: req.body.email,
-                  seller:req.body.seller,
+                  seller: req.body.seller,
                 });
               });
           });
         });
       }
     });
-
- 
 });
 //login route
-app.get('/login',(req, res) => {
+app.get("/login", (req, res) => {
   res.sendFile(path.join(staticPath, "login.html"));
-} )
+});
 
-app.post('/login', (req, res) => {
-  let {email, password} = req.body;
-  if(!email.length || !password.length){
-    return res.json({'alert': 'fill all the inputs'})
+app.post("/login", (req, res) => {
+  let { email, password } = req.body;
+  if (!email.length || !password.length) {
+    return res.json({ alert: "fill all the inputs" });
   }
-  db.collection('users').doc(email).get()
-  .then(user => {
-    if(!user.exists){
-      return res.json({'alert': 'log in email does not exists'})
-    }else{
-      bcrypt.compare(password, user.data().password, (err, result) => {
-        if(result){
-          let data = user.data();
-          return res.json({
-            name: data.name,
-            email: data.email,
-          seller: data.seller,
-          })
-        }else{
-          return res.json({'alert' : 'password is incorrect'});
-        }
-      })
-    }
-  })
-})
+  db.collection("users")
+    .doc(email)
+    .get()
+    .then((user) => {
+      if (!user.exists) {
+        return res.json({ alert: "log in email does not exists" });
+      } else {
+        bcrypt.compare(password, user.data().password, (err, result) => {
+          if (result) {
+            let data = user.data();
+            return res.json({
+              name: data.name,
+              email: data.email,
+              seller: data.seller,
+            });
+          } else {
+            return res.json({ alert: "password is incorrect" });
+          }
+        });
+      }
+    });
+});
 //seller route
-app.get('/seller', (req, res) => {
+app.get("/seller", (req, res) => {
   res.sendFile(path.join(staticPath, "seller.html"));
-})
+});
 
-app.post('/seller', (req,res) => {
-  let{name, about, address, number, tac, legit , email } =req.body;
-  if(!name.length || !address.length || !about.length || number.length <10 || !Number(number)){
-    return res.json({'alert':'some informations is/are invalid'});
-  }else if(!tac || !legit){
-    return res.json({'alert': 'you must agree to our terms and condition'})
-  }else{
+app.post("/seller", (req, res) => {
+  let { name, about, address, number, tac, legit, email } = req.body;
+  if (
+    !name.length ||
+    !address.length ||
+    !about.length ||
+    number.length < 10 ||
+    !Number(number)
+  ) {
+    return res.json({ alert: "some informations is/are invalid" });
+  } else if (!tac || !legit) {
+    return res.json({ alert: "you must agree to our terms and condition" });
+  } else {
     //update users seller status here
-    db.collection('seller').doc(email).set(req.body).then(data => {
-      db.collection('users').doc(email).update({
-        seller:true
-      }).then(data =>{
-        res.json(true);
-      })
-    })
+    db.collection("seller")
+      .doc(email)
+      .set(req.body)
+      .then((data) => {
+        db.collection("users")
+          .doc(email)
+          .update({
+            seller: true,
+          })
+          .then((data) => {
+            res.json(true);
+          });
+      });
   }
-})
+});
 
 //add product
-app.get('/add-product', (req, res) => {
+app.get("/add-product", (req, res) => {
   res.sendFile(path.join(staticPath, "addProduct.html"));
-})
+});
+
+//get the upload link
+app.get("/s3url", (req, res) => {
+  generateUrl().then((url) => res.json(url));
+});
 //404 route
 app.use("/404", (req, res) => {
   res.sendFile(path.join(staticPath, "404.html"));
