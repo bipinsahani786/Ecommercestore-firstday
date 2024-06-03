@@ -1,24 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seller Dashboard</title>
-    <link rel="stylesheet" href="css/signup.css">
-    <link rel="stylesheet" href="css/seller.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seller Dashboard</title>
+  <link rel="stylesheet" href="css/signup.css">
+  <link rel="stylesheet" href="css/seller.css">
+  <link rel="stylesheet" href="css/home.css">
+  <link rel="stylesheet" href="css/search.css">
 </head>
+
 <body>
-    <img src="img/loader.gif" class="loader" alt="">
-    <div class="alert-box ">
-        <img src="img/error.png" class="alert-img" alt="">
-        <p class="alert-msg">Error message</p>
-    </div>
+  <img src="img/loader.gif" class="loader" alt="">
+  <div class="alert-box ">
+    <img src="img/error.png" class="alert-img" alt="">
+    <p class="alert-msg">Error message</p>
+  </div>
   <img src="img/dark-logo.png" class="logo" alt="">
 
   <!-- become seller element -->
   <div class="become-seller hide">
     <p class="heading">become a seller</p>
-    <p class="des">Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque, accusamus. Reprehenderit voluptatem ea aspernatur ad, esse quo ipsa odit aut. Possimus quas, laborum consequuntur quae vel dolorum cumque ipsa porro, unde harum, animi commodi exercitationem doloremque pariatur provident molestias iste eius. Mollitia est odio impedit rem doloribus, eaque voluptate quidem, corrupti quos repudiandae facilis repellendus sed harum, fugiat quas dignissimos adipisci corporis ullam. Animi, ipsa odit corrupti beatae necessitatibus nobis voluptas qui velit sequi similique nam possimus excepturi saepe, eius fuga, libero voluptates doloremque dicta alias reiciendis! Dolor nam doloremque id ad autem eligendi culpa at. Similique esse id possimus.</p>
+    <p class="des">Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque, accusamus. Reprehenderit voluptatem
+      ea aspernatur ad, esse quo ipsa odit aut. Possimus quas, laborum consequuntur quae vel dolorum cumque ipsa porro,
+      unde harum, animi commodi exercitationem doloremque pariatur provident molestias iste eius. Mollitia est odio
+      impedit rem doloribus, eaque voluptate quidem, corrupti quos repudiandae facilis repellendus sed harum, fugiat
+      quas dignissimos adipisci corporis ullam. Animi, ipsa odit corrupti beatae necessitatibus nobis voluptas qui velit
+      sequi similique nam possimus excepturi saepe, eius fuga, libero voluptates doloremque dicta alias reiciendis!
+      Dolor nam doloremque id ad autem eligendi culpa at. Similique esse id possimus.</p>
     <button class="btn" id="apply-btn">apply for seller account</button>
   </div>
 
@@ -41,13 +51,33 @@
   <!-- product list -->
   <div class="product-listing hide">
     <div class="add-product">
-        <p class="add-product-title">add product</p>
-        <button class="btn">add product</button>
+      <p class="add-product-title">add product</p>
+      <button class="btn" onclick="location.href = '/add-product'">add product</button>
     </div>
-    <img src="img/no-product-found.jpg" alt="" class="no-product-image">
+    <img src="img/no-product-found.jpg" alt="" class="no-product-image hide">
+
+    <!-- cards -->
+    <div class="product-container">
+      <div class="product-card">
+        <div class="product-image">
+          <span class="tag">Draft</span>
+          <img src="img/card1.png" alt="" class="product-thumb">
+          <button class="card-action-btn edit-btn"> <img src="img/edit.png" alt=""></button>
+          <button class="card-action-btn open-btn"> <img src="img/open.png" alt=""></button>
+          <button class="card-action-btn delete-popup-btn"> <img src="img/delete.png" alt=""></button>
+        </div>
+        <div class="product-info">
+          <h2 class="product-brand">brand</h2>
+          <p class="product-short-des">a short line about product</p>
+          <span class="price">$20</span><span class="actual-price">$40</span>
+        </div>
+      </div>
+    </div>
   </div>
 
-    <script src="js/token.js"></script>
-    <script src="js/seller.js"></script>
+  <script src="js/token.js"></script>
+  <script src="js/seller.js"></script>
+  <script src="js/createProduct.js"></script>
 </body>
+
 </html>

@@ -1,19 +1,20 @@
 let loader = document.querySelector('.loader');
-
+let user = JSON.parse(sessionStorage.user);
 const becomeSellerElement = document.querySelector('.become-seller');
 const productListingElement = document.querySelector('.product-listing');
 const applyForm = document.querySelector('.apply-form');
 const showApplyFormBtn = document.querySelector('#apply-btn');
 
 window.onload = () => {
-    if(sessionStorage.user){
-        let user = JSON.parse(sessionStorage.user);
+    if(user){
         if(compareToken(user.authToken, user.email)){
             if(!user.seller){
 
                 becomeSellerElement.classList.remove('hide');
             }else{
-                productListingElement.classList.remove('hide');
+               // productListingElement.classList.remove('hide');
+               loader.style.display = 'block';
+               setupProducts();
             }
         }
         else{
@@ -62,3 +63,21 @@ applyFormButton.addEventListener('click', () => {
         })
     }
 })
+
+const setupProducts = () => {
+    fetch('/get-products', {
+        method:'post',
+        headers: new Headers({"Content-type": "application/json"}),
+        body:JSON.stringify({email:user.email})
+    }).then(res =>res.json())
+    .then(data => {
+        loader.style.display = null;
+        productListingElement.classList.remove('hide');
+        if(data == 'no products'){
+            let emptySvg = document.querySelector('.no-product-image');
+            emptySvg.classList.remove('hide');
+        }else{
+            data.forEach( product => createProduct(product));
+        }
+    });
+}

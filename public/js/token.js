@@ -60,6 +60,9 @@ const sendData = (path, data) => {
       sessionStorage.user = JSON.stringify(user);
       location.reload();
     }
+    else if(data.product){
+      location.href = '/seller'
+    };
   };
   
   // alert function
@@ -71,5 +74,6 @@ const sendData = (path, data) => {
     setTimeout(() => {
       alertBox.classList.remove("show");
     }, 2000);
+    return false;
   };
   
