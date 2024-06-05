@@ -149,3 +149,77 @@ addProductBtn.addEventListener("click", () => {
     sendData('/add-product', data);
   }
 });
+
+//save draft
+saveDraft.addEventListener('click', () => {
+  // alert('draft')
+  //store sizes
+  storeSizes();
+  //check for product name
+  if(!productName.value.length){
+    showAlert('enter product name')
+  }else{
+    //don't validate the data
+    let data = productData();
+    data.draft = true;
+    sendData('/add-product', data);
+  }
+})
+
+//existing product detail handle
+const setFormsData = (data) => {
+  // console.log(data);
+  productName.value = data.name;
+  shortLine.value = data.shortDes;
+  des.value = data.des;
+  actualPrice.value = data.actualPrice;
+  discountPercentage.value = data.discount;
+  sellingPrice.value = data.sellPrice;
+  stock.value = data.stock;
+  tags.value = data.tags;
+
+  //set up images
+  imagePaths = data.images;
+  imagePaths.forEach((url, i ) => {
+    let label = document.querySelector(`label[for=${uploadImages[i].id}]`);
+    label.style.backgroundImage = `url(${url})`;
+    let productImage = document.querySelector(".product-image");
+    productImage.style.backgroundImage = `url(${url})`;
+  })
+
+  //setup sizes
+  sizes = data.sizes;
+
+  let sizeCheckBox = document.querySelectorAll('.size-checkbox');
+  sizeCheckBox.forEach(item => {
+    if(sizes.includes(item.value)){
+      item.setAttribute('checked', '');
+    }
+  })
+}
+const fetchProductData = () => {
+  //delete the tempProduct from the session
+  delete sessionStorage.tempProduct;
+  fetch('/get-products', {
+    method: 'post',
+    headers:new Headers({'Content-Type': 'application/json'}),
+    body:JSON.stringify({email:user.email, id:productId})
+  }).then((res) => res.json())
+  .then(data => {
+    // console.log(data);
+    setFormsData(data);
+  }).catch(err => {
+    // location.replace('/seller');
+  })
+}
+let productId = null;
+// console.log(location.pathname);
+if(location.pathname != '/add-product'){
+  productId = decodeURI(location.pathname.split('/').pop());
+  let productDetail = JSON.parse(sessionStorage.tempProduct || null);
+  //fetch the data if product is not in session
+ // if(productDetail == null){
+    fetchProductData();
+ // }
+
+}

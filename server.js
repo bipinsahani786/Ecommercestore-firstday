@@ -183,20 +183,26 @@ app.get("/add-product", (req, res) => {
   res.sendFile(path.join(staticPath, "addProduct.html"));
 });
 
+app.get("/add-product/:id", (req, res) => {
+  res.sendFile(path.join(staticPath, "addProduct.html"));
+});
+
 //get the upload link
 app.get("/s3url", (req, res) => {
   generateUrl().then((url) => res.json(url));
 });
 //add product
 app.post('/add-product', (req, res) => {
-  let {name , shortDes , des, images, sizes, actualPrice, discount, sellPrice, stock, tags, tac, email } = req.body;
+  let {name , shortDes , des, images, sizes, actualPrice, discount, sellPrice, stock, tags, tac, email , draft} = req.body;
 
   //validation
-  if (!name.length) {
-    return res.json({'alert':'enter product name'});
-  } else if (shortDes.length > 100 || shortDes.length < 10) {
-    return res.json({'alert':'short description must be between 10 to 100 letters long'
-  });
+  if(!draft){
+
+    if (!name.length) {
+      return res.json({'alert':'enter product name'});
+    } else if (shortDes.length > 100 || shortDes.length < 10) {
+      return res.json({'alert':'short description must be between 10 to 100 letters long'
+    });
   } else if (!des.length) {
     return res.json({'alert':'enter detail description about the product'});
   } else if (!images.length) {
@@ -216,6 +222,7 @@ app.post('/add-product', (req, res) => {
   } else if (!tac) {
     return res.json({'alert':'you must agree to our terms and conditions'});
   }
+}
 
   //add product
   let docName = `${name.toLowerCase()}-${Math.floor(Math.random()* 5000)}`;
@@ -229,8 +236,8 @@ app.post('/add-product', (req, res) => {
 
 //get products
 app.post('/get-products', (req, res) => {
-  let {email} = req.body;
-  let docRef = db.collection('products').where('email', '==', email);
+  let {email, id} = req.body;
+  let docRef = id ? db.collection('products').doc(id): db.collection('products').where('email', '==', email);
   docRef.get()
   .then(products => {
   if(products.empty){
@@ -238,13 +245,29 @@ app.post('/get-products', (req, res) => {
   }
 
   let productArr = [];
-  products.forEach(item => {
-    let data = item.data();
-    data.id = item.id;
-    productArr.push(data);
-  })
-  res.json(productArr)
+  if(id){
+    return res.json(products.data());
+  }else{
+    products.forEach(item => {
+      let data = item.data();
+      data.id = item.id;
+      productArr.push(data);
+    })
+    res.json(productArr)
+  }
+ 
 })
+})
+
+app.post('/delete-product', (req, res) => {
+  let {id} = req.body;
+  db.collection('products').doc(id).delete()
+    .then(data => {
+     res.json('success');
+    }).catch(err =>{
+      res.json('err');
+    })
+  
 })
 //404 route
 app.use("/404", (req, res) => {
