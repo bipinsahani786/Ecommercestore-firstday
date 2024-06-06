@@ -199,7 +199,7 @@ const setFormsData = (data) => {
 }
 const fetchProductData = () => {
   //delete the tempProduct from the session
-  delete sessionStorage.tempProduct;
+  //delete sessionStorage.tempProduct;
   fetch('/get-products', {
     method: 'post',
     headers:new Headers({'Content-Type': 'application/json'}),
@@ -216,7 +216,7 @@ let productId = null;
 // console.log(location.pathname);
 if(location.pathname != '/add-product'){
   productId = decodeURI(location.pathname.split('/').pop());
-  let productDetail = JSON.parse(sessionStorage.tempProduct || null);
+  //let productDetail = JSON.parse(sessionStorage.tempProduct || null);
   //fetch the data if product is not in session
  // if(productDetail == null){
     fetchProductData();

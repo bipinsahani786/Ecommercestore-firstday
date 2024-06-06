@@ -269,6 +269,10 @@ app.post('/delete-product', (req, res) => {
     })
   
 })
+// product page
+app.get('/products/:id', (req, res) => {
+  res.sendFile(path.join(staticPath, "product.html"))
+})
 //404 route
 app.use("/404", (req, res) => {
   res.sendFile(path.join(staticPath, "404.html"));
