@@ -137,7 +137,7 @@ const productData = () => {
         discount:discountPercentage.value,
         sellPrice: sellingPrice.value,
         stock:stock.value,
-        tags:tags.value,
+        tags:tagArr,
         tac:tac.checked,
         email:user.email
     }

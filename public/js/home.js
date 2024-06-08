@@ -86,7 +86,7 @@ const createProductCards = (data, parent) => {
         middle += ` <div class="product-card">
         <div class="product-image">
             <span class="discount-tag">${data[i].discount}% off</span>
-            <img src="${data[i].images}" alt="" class="product-thumb">
+            <img src="${data[i].images[1]}" alt="" class="product-thumb">
             
         </div>
         <div class="product-info">
