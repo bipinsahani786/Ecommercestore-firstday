@@ -64,12 +64,12 @@ const getProducts = (tag) => {
 
 //create product slider
 const createProductSlider = (data, parent , title) => {
-    console.log(data)
+  //  console.log(data)
     let slideContainer = document.querySelector(`${parent}`);
     slideContainer.innerHTML += `<section class="product">
     <h2 class="product-category">${title}</h2>
-    <button class="pre-btn"><img src="img/arrow.png" alt=""></button>
-    <button class="nxt-btn"><img src="img/arrow.png" alt=""></button>
+    <button class="pre-btn"><img src="../img/arrow.png" alt=""></button>
+    <button class="nxt-btn"><img src="../img/arrow.png" alt=""></button>
     ${createProductCards(data)}
     </section>`
 
@@ -83,19 +83,21 @@ const createProductCards = (data, parent) => {
     let middle = ``;//this will contain card html
     let end = `<div>`;
     for(let i =0; i<data.length; i++){
+     if(data[i].id != decodeURI(location.pathname.split('/').pop())){
         middle += ` <div class="product-card">
         <div class="product-image">
             <span class="discount-tag">${data[i].discount}% off</span>
-            <img src="${data[i].images[1]}" alt="" class="product-thumb">
+            <img src="${data[i].images[0]}" alt="" class="product-thumb">
             
         </div>
-        <div class="product-info">
+        <div class="product-info" onclick="location.href = '/products/${data[i].id}'">
             <h2 class="product-brand">${data[i].name}</h2>
             <p class="product-short-des">${data[i].shortDes}</p>
             <span class="price">$${data[i].sellPrice}</span>
             <span class="actual-price">$${data[i].actualPrice}</span>
         </div>
     </div>`
+     }
     }
     return start + middle + end;
 }

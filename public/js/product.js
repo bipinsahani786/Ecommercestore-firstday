@@ -73,8 +73,8 @@ const fetchProductData = () => {
     }).then(res => res.json())
     .then(data =>{ 
         setData(data);
-       console.log(data.tags)
-       getProducts(data.tags[1]).then(data => createProductSlider(data ,'.container-for-card-slider', 'similar products' ))
+       //console.log(data.tags)
+       getProducts(data.tags[0]).then(data => createProductSlider(data ,'.container-for-card-slider', 'similar products' ))
 
     })
     .catch(err => {
