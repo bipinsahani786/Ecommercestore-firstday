@@ -22,7 +22,7 @@
         </div>
 
     </header>
-    <section class="men-tshirt-products"></section>
+    <section id="men-tshirt-products"></section>
     <!-- cards-container -->
 <!-- 
     <section class="product">
@@ -136,7 +136,7 @@
 
     </section>
     
-    <section class="men-tshirt-products-2"></section>
+    <section id="men-tshirt-products-2"></section>
     <!-- shoes card container -->
 <!-- 
     <section class="product">
@@ -381,8 +381,13 @@
 
 
     <script src="js/nav.js"></script>
-    <script src="js/home.js"></script>
     <script src="js/footer.js"></script>
+    <script src="js/home.js"></script>
+    <script>
+        
+        getProducts('Black').then(data => createProductSlider(data, '#men-tshirt-products', 'Men T-shirt'))
+        getProducts('Black').then(data => createProductSlider(data, '#men-tshirt-products-2', 'Men T-shirt'))
+    </script>
 </body>
 
 </html>

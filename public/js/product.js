@@ -16,12 +16,13 @@ productImages.forEach((item , i ) => {
 const sizeBtns = document.querySelectorAll('.size-radio-btn');
 
 let checkedBtn = 0;
-
+let size;
 sizeBtns.forEach((item, i) => {
     item.addEventListener('click', () => {
         sizeBtns[checkedBtn].classList.remove('check');
         item.classList.add('check');
         checkedBtn = i;
+        size = item.innerHTML;
     })
 })
 
@@ -61,11 +62,21 @@ const setData = (data) => {
 
    sellPrice.innerHTML= `$${data.sellPrice}`;
    actualPrice.innerHTML = `$${data.actualPrice}`;
-   discount.innerHTML = `$${data.discount}% off`;
-    
+   discount.innerHTML = `(${data.discount}% off)`;
+    //wishlist and cart btn
+  
+    const wishlistBtn = document.querySelector('.wishlist-btn');
+    wishlistBtn.addEventListener('click', () => {
+        wishlistBtn.innerHTML = add_product_to_cart_or_wishlist('wishlist', data)
+    })
+    const cartBtn = document.querySelector('.cart-btn');
+    cartBtn.addEventListener('click', () => {
+        cartBtn.innerHTML = add_product_to_cart_or_wishlist('cart', data)
+    })
 }
 //fetch data
 const fetchProductData = () => {
+  
     fetch('/get-products', {
         method:'post',
         headers: new Headers({'Content-Type':'application/json '}),
@@ -73,18 +84,19 @@ const fetchProductData = () => {
     }).then(res => res.json())
     .then(data =>{ 
         setData(data);
-       //console.log(data.tags)
+     //  console.log(data.tags)
        getProducts(data.tags[0]).then(data => createProductSlider(data ,'.container-for-card-slider', 'similar products' ))
 
     })
     .catch(err => {
-        location.replace('/404');
+       location.replace('/404');
+      // console.log(data);
     })
 }
 
 let productId = null;
 if(location.pathname != '/products'){
     productId = decodeURI(location.pathname.split('/').pop());
-    // console.log(productId);
+     
     fetchProductData();
 }

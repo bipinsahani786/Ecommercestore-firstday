@@ -64,7 +64,7 @@ const getProducts = (tag) => {
 
 //create product slider
 const createProductSlider = (data, parent , title) => {
-  //  console.log(data)
+   //console.log(data)
     let slideContainer = document.querySelector(`${parent}`);
     slideContainer.innerHTML += `<section class="product">
     <h2 class="product-category">${title}</h2>
@@ -83,6 +83,7 @@ const createProductCards = (data, parent) => {
     let middle = ``;//this will contain card html
     let end = `<div>`;
     for(let i =0; i<data.length; i++){
+       // console.log(data)
      if(data[i].id != decodeURI(location.pathname.split('/').pop())){
         middle += ` <div class="product-card">
         <div class="product-image">
@@ -99,5 +100,30 @@ const createProductCards = (data, parent) => {
     </div>`
      }
     }
-    return start + middle + end;
+    if(parent){
+          let cardContainer = document.querySelector(parent);
+          cardContainer.innerHTML = start + middle + end;
+    }else{
+
+        return start + middle + end;
+    }
+}
+
+const add_product_to_cart_or_wishlist = (type, product) => {
+    let data = JSON.parse(localStorage.getItem(type));
+    if(data == null){
+        data = [];
+    }
+    product = {
+        item: 1,
+        name: product.name,
+        sellPrice: product.sellPrice,
+        size: size || null,
+        shortDes: product.shortDes,
+        images: product.images[0]
+    }
+    data.push(product);
+   // console.log(data);
+   localStorage.setItem(type, JSON.stringify(data));
+    return 'added';
 }
