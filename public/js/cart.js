@@ -49,7 +49,7 @@ const setupEvents = (name) => {
     const deleteBtn = document.querySelectorAll(`.${name} .sm-delete-btn`);
 
     let product = JSON.parse(localStorage.getItem(name));
-   console.log(name)
+//    console.log(name)
     counts.forEach((item, i) => {
         let cost = Number(price[i].getAttribute('data-price'));
         counterMinus[i].addEventListener('click', ()=> {

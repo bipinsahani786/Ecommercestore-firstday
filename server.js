@@ -3,6 +3,7 @@ const express = require("express");
 const admin = require("firebase-admin");
 const bcrypt = require("bcrypt");
 const path = require("path");
+const nodemailer = require("nodemailer");
 
 //firebase setup
 
@@ -293,9 +294,106 @@ app.get('/cart', (req, res) => {
 app.get('/checkout', (req, res) => {
   res.sendFile(path.join(staticPath,"checkout.html" ));
 })
+app.post('/order', (req, res) => {
+  try {
+    const { order, email, add } = req.body;
+     let transporter = nodemailer.createTransport({
+      service:'gmail',
+      auth:{
+        user:process.env.EMAIL,
+        pass:process.env.PASSWORD,
+      }
+     })
 
+     const mailOption = {
+      from:process.env.EMAIL,
+      to:email,
+      subject:'Clothing: Order placed',
+      html:`
+      <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            min-height: 90vh;
+            background: #f5f5f5;
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .heading{
+            text-align: center;
+            font-size: 40px;
+            width: 50%;
+            display: block;
+            line-height: 50px;
+            margin: 30px auto 60px;
+            text-transform: capitalize;
+        }
+        .heading span{
+            font-weight: 300;
+        }
+        .btn{
+            width: 200px;
+            height: 50px;
+            border-radius: 5px;
+            background: #3f3f3f;
+            color: #fff;
+            display: block;
+            margin: auto;
+            font-size: 18px;
+            text-transform: capitalize;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1 class="heading">dear ${email.split('@')[0]}, <span>your order is succesfully placed</span></h1>
+        <button class="btn">check status</button>
+    </div>
+</body>
+</html>`
+     }
+    if (!order || !email || !add) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
 
+    const docName = email + Math.floor(Math.random()*123719287419824); 
+    db.collection('order').doc(docName).set(req.body)
+      .then(data => {
+        transporter.sendMail(mailOption, (err, info) => {
+          if(err){
+            res.json({'alert': 'oops its seems like some err occured. Try again !'})
+          }else{
+            res.json({'alert': 'your order is placed'});
+          }
+        })
+      })
+      .catch((error) => {
+        console.error('Error writing document: ', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+      });
+  } catch (error) {
+    console.error('Unexpected error: ', error);
+    res.status(500).json({ error: 'Unexpected Server Error' });
+  }
+});
 
+// app.post('/order', (req, res) => {
+//   const {order, email, add} = req.body;
+  
+//   let docName = email + Math.floor(Math.random() * 1237192874419824);
+//   db.collection('order').doc(docName).set(req.body)
+//   .then(() => {
+//     res.json('done');
+//   }).catch(err =>{
+//     res.status(500).json({ error: 'Internal Server Error' });
+//   })
+// })
 //404 route
 app.use("/404", (req, res) => {
   res.sendFile(path.join(staticPath, "404.html"));
